@@ -1,0 +1,134 @@
+Test Case TixSplit - SQA,,,,,,,,,,,,
+Quality Assurance Test Execution Tracker • Split Bill & Payment Checkout,,,,,,,,,,,,
+,,,,,,,,,,,,
+TOTAL TESTS,,UNTESTED,,PASSED,,,,FAILED / BLOCKED,,CRITICAL & HIGH,,
+15,,0,,15,,,,0,,15,,
+,,,,,,,,,,,,
+Nomor,Test Case ID,Test Case Name,Pre-conditions,Test Steps,Data Test,Response Body,Expected Result,Actual Result,Test Type,Severity/Priority,Status,Evidence
+1,TC-AUTH-002,Registrasi dengan email duplikat,Email sudah terdaftar di database,"1. Masukkan nama, email terdaftar, password.
+2. Klik Daftar.","nama: admin 
+email: admin@dibimbing.local
+password: Password123!",,"Sistem menolak dan muncul message ""Email already registered. Sign in instead."" ","User gagal membuat akun baru dan muncul message ""Email already registered. Sign in instead.""",Negative,Critical,Passed,
+2,TC-AUTH-003,Login email+password valid,User sudah teregistrasi,"1. Masukkan email dan password valid.
+2. Klik Login.","email: admin@dibimbing.local
+password: Password123!",,"Login sukses, dan user akan dialihkan ke landing page.",User sukses login dan user akan dialihkan ke landing page,Positive,Critical,Passed,
+3,TC-AUTH-004,Login kredensial salah,User sudah teregistrasi,"1. Masukkan password salah.
+2. Klik Login.","email: admin@dibimbing.local
+password: asdasdasd",,"Sistem menolak dan muncul message ""Invalid email or password."" ","User gagal login dan muncul message ""Invalid email or password.""",Negative,Critical,Passed,
+4,TC-COM-001,Membuat komunitas baru,User sudah login dan di halaman komunitas https://tixsplit.dibimbing.id/profile?tab=communities,"1. Isi nama, deskripsi, cover image, dan join policy.
+2. Klik Create community.","Nama: Arsenal
+Deskripsi: untuk fans arsenal
+Join Policy: need admin confirmation",,"Komunitas berhasil dibuat, user pembuat otomatis menjadi OWNER.",User sukses membuat komunitas dan langsung diarahkan ke halaman komunitas yang sudah dibuat https://tixsplit.dibimbing.id/communities/arsenal ,Positive,High,Passed,
+5,TC-EVT-001,Membuat event berbayar (FIXED) PUBLIC,User login dengan role OWNER/ADMIN dan ada di halaman https://tixsplit.dibimbing.id/profile ,"1. User menekan tombol create event 
+2. User menakan tombol community ""Arsenal""
+3. Isi field wajib.
+3. Set pricing FIXED dan metode bayar.
+4. Simpan.","- Nama: London Forever
+- Category: Knowledge
+- Deskripsi: Champion 2025/2026
+- Date: 30 Nov 2026
+- Location: London
+- Participation limit: 14
+- Visibility: Public
+- Pricing: Fixed Price
+- Admin fee bearer: Ditanggung peserta (+ fee)
+- Jumlah yang diterima penyelenggara (IDR): 50000
+- Catatan tambahan (opsional): Konfirmasi Arsenal adalah champion!
+-  Metode pembayaran: 
++ Catatan: BRI
++ Nomor Rekening: 01234567
++ URL gambar QRIS (opsional): (Kosong)
+",,Event berhasil dibuat dan dapat dilihat publik.,user sukses membuat event dan akan dialihkan ke halaman event yang dibuat https://tixsplit.dibimbing.id/events/cmw0csxad003plb043oq2rut9 ,Positive,Critical,Passed,
+6,TC-EVT-002,Gagal membuat event jika field wajib kosong,"User login dengan role OWNER/ADMIN,  ada di halaman https://tixsplit.dibimbing.id/communities/arsenal/events/new ","1. Kosongkan ""Tanggal"".
+2. Klik Simpan.","- Nama: London Forever
+- Category: Knowledge
+- Deskripsi: Champion 2025/2026
+- Date: (Kosong)
+- Location: London
+- Participation limit: 14
+- Visibility: Public
+- Pricing: Fixed Price
+- Admin fee bearer: Ditanggung peserta (+ fee)
+- Jumlah yang diterima penyelenggara (IDR): 50000
+- Catatan tambahan (opsional): Konfirmasi Arsenal adalah champion!
+-  Metode pembayaran: 
++ Catatan: BRI
++ Nomor Rekening: 01234567
++ URL gambar QRIS (opsional): (Kosong)
+",,Sistem menolak untuk lanjut dan muncul notifikasi untuk mengisi tanggal,"User tidak dapat membuat event dan muncul notifikasi ""Please fill in the field"" pada box tanggal.",Negative,High,Passed,
+8,TC-PAY-001,RSVP Event Gratis berhasil,User di halaman event non-berbayar https://tixsplit.dibimbing.id/events/cmvw4fb0u000mlf04duvd2s0r ,"Klik ""Ikut Event"".",,,"Status payment gratis, status peserta menjadi JOINED, muncul message ""You are attending.""","User dapat join event, muncul message ""You are attending."",  muncul tombol cancel attendance, dan muncul field ""Peserta terbaru"" dengan user sebagai peserta",Positive,Critical,Passed,
+9,TC-PAY-002,RSVP Event Gratis saat kuota penuh,berada di halaman event full kuota https://tixsplit.dibimbing.id/events/cmvxeklzy00gnjs04mt6xhvqc ,"1. Klik ""Ikut Event"".",,,Sistem menolak dengan error 409 Event is full.,"Tombol tidak bisa ditekan dan tulisan tombol berubah menjadi ""Event Full""",Negative,Critical,Passed,
+10,TC-PAY-003,Join kembali event yang sudah dibayar dan di-cancel,"User di halaman event berbayar, sudah membayar,  dan sudah tervalidasi oleh host https://tixsplit.dibimbing.id/events/cmvvvjh7g0001l304p0l8wt4z  ","1. Klik ""Cancel attendance"".
+2. Klik ""Join Kembali"" ",,,User dapat join kembali tanpa harus membayar,"saat user klik ""cancel attendance"", muncul message ""Pembayaran kamu sudah tervalidasi sebelumnya.""
+saat user klik ""Join kembali"", user diarahkan ke halaman event dan muncul UI yang sudah tervalidasi pembayarannya  ",Positive,Critical,Passed,
+11,TC-PAY-004,Anti-Oversell Checkout Serentak,Kuota event sisa 4 tiket,1. 5 user hit API checkout paralel di detik sama.,"{
+  ""accounts"": [
+    {
+      ""username"": ""admin@dibimbing.local"",
+      ""password"": ""Password123!"",
+    },
+    {
+      ""username"": ""alice@example.com"",
+      ""password"": ""Password123!"",
+    },
+    {
+      ""username"": ""member@example.com"",
+      ""password"": ""Password123!"",
+    },
+    {
+      ""username"": ""pending@example.com"",
+      ""password"": ""Password123!"",
+    },
+    {
+      ""username"": ""empty@example.com"",
+      ""password"": ""Password123!"",
+    }
+  ]
+}","GREEN: {""ok"":true,""status"":""JOINED"",""already"":true}
+RED : {""error"":""Unauthorized""}","ada user join, ada user error 409.","ada 3 user join, ada 2 user error 409.",Edge Case,Critical,Passed,
+12,TC-PAY-005,Kalkulasi Admin Fee & Kode Unik ,Event dengan fee 5% Bearer PARTICIPANT ,1. Lakukan checkout event.,"page: https://tixsplit.dibimbing.id/events/cmvxbvzl10018l3049auadofz/pay/cmw0w93sm000hlb040qelybmo 
+
+event id: cmvxbvzl10018l3049auadofz
+
+{
+  ""amount"": 105.656
+}","{
+  ""payment"": {
+    ""id"": ""cmw0w93sm000hlb040qelybmo"",
+    ""eventId"": ""cmvxbvzl10018l3049auadofz"",
+    ""userId"": ""cmt9tmh980001l9zn9b5g479e"",
+    ""status"": ""PENDING"",
+    ""baseAmount"": 99999,
+    ""adminFee"": 4999,
+    ""totalAmount"": 104998,
+    ""organizerNet"": 99999,
+    ""currency"": ""IDR"",
+    ""externalId"": ""evt_cmvxbvzl_cmt9tmh9_1793722817397"",
+    ""uniqueCode"": 658,
+    ""expiresAt"": ""2026-11-03T16:35:17.364Z"",
+    ""payerConfirmedAt"": null,
+    ""paidAt"": null,
+    ""webhookPayload"": null,
+    ""createdAt"": ""2026-11-03T16:20:17.398Z"",
+    ""updatedAt"": ""2026-11-03T16:20:17.398Z""
+  },
+  ""breakdown"": {
+    ""pricingType"": ""FIXED"",
+    ""baseAmount"": 99999,
+    ""adminFee"": 4999,
+    ""adminFeePercent"": 5,
+    ""totalAmount"": 104998,
+    ""organizerNet"": 99999,
+    ""adminFeeBearer"": ""PARTICIPANT"",
+    ""currency"": ""IDR""}
+}",Tagihan user = base + 5% fee + 3 digit kode unik (001-999).,total tagihan dari 99.999 menjadi 105.656 dengan admin fee 4.999 (5%) dan 3 digit kode unik (+658),Edge Case,Critical,Passed,
+13,TC-PAY-006,"Klik ""Saya sudah membayar"" lewat batas waktu",User sudah melakukan checkout,"1. User klik ""Gabung Sekarang"".
+2. user membiarkan waktu pembayaran expired",,,"Sistem menolak (error 410), status payment EXPIRED, kuota dilepas.","-user dialihkan dari halaman checkout ke halaman notifikasi pembayaran habis
+-muncul message ""Waktu pembayaran habis. Seat hold sudah dilepas""
+- muncul tombol ""Buat pembayaran baru""",Negative,Critical,Passed,
+14,TC-PAY-007,Pembayaran pada tepat 2 detik terakhir,User sudah melakukan checkout,"1. User klik ""Gabung Sekarang"".
+2. user membiarkan waktu hingga tepat 1 detik terakhir
+3. user klik ""Saya sudah membayar""",,,"Sistem menerima akses, dan menunggu admin untuk konfirmasi",,Edge Case,Critical,Passed,Video recording
+15,TC-PAY-008,Host confirm pembayaran,Ada payment PENDING,1. Host klik confirm pada payment user.,,,"Status payment menjadi PAID, attendee menjadi JOINED.",,Edge Case,Critical,Passed,
+18,TC-SB-003,Pembagian Split Bill sisa desimal ganjil,user sudah login dan ada di halaman split bill https://tixsplit.dibimbing.id/tools/split-bill/cmw0x2rpc0003jr04hj8m26e9 ,"1. Buat tagihan Rp10.000 + pajak Rp1.000.
+2. Bagi rata ke 3 orang.",,,Sistem membagikan sisa pembulatan desimal per Rp1 sehingga total pas tanpa selisih.,,Edge Case,Critical,Passed,

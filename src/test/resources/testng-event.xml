@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!-- Dry test: EventTests only — validates date picker handling (TC-EVT-001, TC-EVT-002) -->
+<suite name="EventDryTest" parallel="false" thread-count="1">
+
+    <parameter name="browser" value="chrome"/>
+
+    <test name="EventTests">
+        <classes>
+            <class name="tests.EventTests"/>
+        </classes>
+    </test>
+
+</suite>
+

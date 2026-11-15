@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<!--
+ API Automation Test Suite:
+ Pure REST Assured API tests executed without browser/WebDriver overhead.
+ Covers Authentication, Event Management, Payments, Concurrency, and Split Bill calculations.
+-->
+<suite name="TixSplitApiTestSuite" parallel="classes" thread-count="4">
+
+    <test name="ApiRegressionTests">
+        <classes>
+            <class name="tests.api.AuthApiTests"/>
+            <class name="tests.api.EventApiTests"/>
+            <class name="tests.api.PaymentApiTests"/>
+            <class name="tests.api.SplitBillApiTests"/>
+            <class name="tests.api.ParallelCheckoutApiTests"/>
+        </classes>
+    </test>
+
+</suite>
