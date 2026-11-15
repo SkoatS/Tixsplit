@@ -33,7 +33,13 @@ gradle test --tests "tests.ParallelCheckoutTests" -Dheadless=true --no-daemon
 gradle test --tests "tests.SplitBillTests" -Dheadless=true --no-daemon
 ```
 
-### 4. Melihat Laporan Hasil Uji (HTML Report)
+### 4. Menjalankan Test Class Tertentu
+```bash
+.\gradlew.bat test "-PsuiteFile=src/test/resources/testng-api.xml" "-Denv=staging"
+```
+
+
+### 5. Melihat Laporan Hasil Uji (HTML Report)
 Setelah pengujian selesai, laporan lengkap dapat dibuka di browser:
 `build/reports/tests/test/index.html`
 
