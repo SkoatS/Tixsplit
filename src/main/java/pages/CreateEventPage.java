@@ -248,8 +248,14 @@ public class CreateEventPage extends BasePage {
     }
 
     public boolean containsTitleText(String title) {
-        By text = By.xpath("//*[contains(text(), '"+ title +"')]");
-        return  driver.findElement(text).isDisplayed();
+        try {
+            waitForUrlContains("/events/");
+            By text = By.xpath("//*[contains(text(), '" + title + "')]");
+            waitForElementToBeVisible(text);
+            return driver.findElement(text).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 
